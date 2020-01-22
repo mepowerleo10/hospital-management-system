@@ -21,9 +21,12 @@
    <link rel="stylesheet" href="vendor/datatables-colvis/css/dataTables.colVis.css">
    <link rel="stylesheet" href="vendor/datatables/media/css/dataTables.bootstrap.css">
    <link rel="stylesheet" href="vendor/dataTables.fontAwesome/index.css">
+
+
    <!-- =============== PAGE VENDOR STYLES ===============-->
    <!-- =============== BOOTSTRAP STYLES ===============-->
    <link rel="stylesheet" href="app/css/bootstrap.css" id="bscss">
+   <link rel="stylesheet" href="vendor/datepicker/build/css/bootstrap-datetimepicker.min.css">
    <!-- =============== APP STYLES ===============-->
    <link rel="stylesheet" href="app/css/app.css" id="maincss">
 </head>
@@ -36,12 +39,12 @@
          <nav role="navigation" class="navbar topnavbar">
             <!-- START navbar header-->
             <div class="navbar-header">
-               <a href="/" class="navbar-brand">
+               <a href="/admin-dashboard" class="navbar-brand">
                   <div class="brand-logo">
                      HospitalManagementSystem
                   </div>
                   <div class="brand-logo-collapsed">
-                     <img src="app/img/logo-single.png" alt="App Logo" class="img-responsive">
+                     <img src="img/logo-single.png" alt="App Logo" class="img-responsive">
                   </div>
                </a>
             </div>
@@ -75,12 +78,12 @@
                <!-- START Language list-->
 
                <!-- END Language list    -->
-               Doctor
+               Appointment
                <small data-localize="dashboard.WELCOME"></small>
                <div class="pull-right">
                   <div class="btn-group">
-                     <button style="bottom: 27px;" id="addpatient" class="mb-sm btn btn-primary" type="button">Add
-                        Doctor</button>
+                     <button style="bottom: 27px;" id="addpatient" class="mb-sm btn btn-primary" type="button">Book
+                        Appointment</button>
 
                   </div>
                </div>
@@ -93,12 +96,9 @@
                         <table id="datatable4" class="table table-striped">
                            <thead>
                               <tr>
-                                 <th style="width:20%">First Name</th>
-                                 <th style="width:25%">Last Name</th>
-                                 <th style="width:25%">Address</th>
-                                 <th style="width:15%">Phone Number</th>
-                                 <th style="width:15%">&nbsp</th>
-                                 <th style="width:15%"></th>
+                                 <th style="width:20%">Doctor Name</th>
+                                 <th style="width:25%">Patient Name</th>
+                                 <th style="width:15%">Appointment Date</th>
                                  <th style="width:15%"></th>
                               </tr>
                            </thead>
@@ -123,40 +123,34 @@
                <button type="button" data-dismiss="modal" aria-label="Close" class="close">
                   <span aria-hidden="true">&times;</span>
                </button>
-               <h4 id="myModalLabel" class="modal-title">Doctor</h4>
+               <h4 id="myModalLabel" class="modal-title">Appointment</h4>
             </div>
             <div class="modal-body">
                <form data-parsley-validate="" novalidate="" class="form-horizontal" id="detailform">
                   <div class="form-group">
-                     <label class="col-lg-2 control-label">First Name</label>
+                     <label class="col-lg-2 control-label">Doctor</label>
                      <div class="col-lg-10">
-                        <input required type="text" name="doc_first_name" class="form-control" placeholder="First Name">
+                        <select required id="doctor_select" type="text" name="doc_id" class="form-control"
+                           placeholder="Please select doctor"></select>
                      </div>
                   </div>
                   <div class="form-group">
-                     <label class="col-lg-2 control-label">Last name</label>
+                     <label class="col-lg-2 control-label">Patient</label>
                      <div class="col-lg-10">
-                        <input required type="text" name="doc_last_name" class="form-control" placeholder="Last name">
+                        <select required id="patient_select" type="text" name="pat_id" class="form-control"
+                           placeholder="Please select Patient"></select>
                      </div>
                   </div>
 
                   <div class="form-group">
-                     <label class="col-lg-2 control-label">Phone Number</label>
-                     <div class="col-lg-10">
-                        <input required name="doc_ph_no" type="text" class="form-control" placeholder="Phone Number">
-                     </div>
-                  </div>
-                  <div class="form-group">
-                     <label class="col-lg-2 control-label">Address</label>
-                     <div class="col-lg-10">
-                        <textarea required name="doc_address" class="form-control" placeholder="Address"></textarea>
-                     </div>
-                  </div>
+                     <label class="col-lg-2 control-label">Appointment date</label>
 
+                     <div class="col-lg-10">
+                        <input size="16" type="text" name="appointment_date" required class="form-control form_datetime"
+                           value="" readonly>
+                     </div>
+                  </div>
                </form>
-
-
-
             </div>
             <div class="modal-footer">
                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
@@ -169,7 +163,8 @@
    <!-- MODERNIZR-->
    <script src="vendor/modernizr/modernizr.custom.js"></script>
    <!-- JQUERY-->
-   <script src="vendor/jquery/dist/jquery.js"></script>
+   <script src="vendor/jquery/dist/jquery.js">
+      <script src="vendor/moment/moment-with-locales.min.js"></script>
    <!-- BOOTSTRAP-->
    <script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
    <script src="vendor/datatables/media/js/jquery.dataTables.min.js"></script>
@@ -186,10 +181,11 @@
    <script src="vendor/sweetalert/dist/sweetalert.min.js"></script>
    <!-- LOCALIZE-->
    <script src="vendor/jquery-localize-i18n/dist/jquery.localize.js"></script>
+   <script src="vendor/datepicker/build/js/bootstrap-datetimepicker.min.js"></script>
    <!-- =============== PAGE VENDOR SCRIPTS ===============-->
    <!-- =============== APP SCRIPTS ===============-->
    <script src="app/js/app.js"></script>
-   <script src="js/doctor.js"></script>
+   <script src="js/appointment.js"></script>
 </body>
 
 </html>

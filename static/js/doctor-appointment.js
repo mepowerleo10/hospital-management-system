@@ -4,7 +4,7 @@ $(document).ready(function () {
         var settings = {
             "async": true,
             "crossDomain": true,
-            "url": "doctor",
+            "url": "doctor-appointments",
             "method": "POST",
             "headers": {
                 "content-type": "application/json",

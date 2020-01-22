@@ -22,27 +22,61 @@ def dict_factory(cursor, row):
 
 conn.row_factory = dict_factory
 
-conn.execute('''CREATE TABLE if not exists patient
-(pat_id INTEGER PRIMARY KEY AUTOINCREMENT,
-pat_first_name TEXT NOT NULL,
-pat_last_name TEXT NOT NULL,
-pat_insurance_no TEXT NOT NULL,
-pat_ph_no TEXT NOT NULL,
-pat_date DATE DEFAULT (datetime('now','localtime')),
-pat_address TEXT NOT NULL);''')
+conn.execute(
+    ''' 
+        CREATE TABLE IF NOT EXISTS `admin` (
+        `ad_id`INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+        `ad_first_name`TEXT NOT NULL,
+        `ad_last_name`TEXT NOT NULL)
+    '''
+)
 
-conn.execute('''CREATE TABLE if not exists doctor
-(doc_id INTEGER PRIMARY KEY AUTOINCREMENT,
-doc_first_name TEXT NOT NULL,
-doc_last_name TEXT NOT NULL,
-doc_ph_no TEXT NOT NULL,
-doc_date DATE DEFAULT (datetime('now','localtime')),
-doc_address TEXT NOT NULL);''')
+conn.execute(
+    '''
+        CREATE TABLE IF NOT EXISTS "patient"
+        (pat_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pat_first_name TEXT NOT NULL,
+        pat_last_name TEXT NOT NULL,
+        pat_insurance_no TEXT NOT NULL,
+        pat_ph_no TEXT NOT NULL,
+        pat_date DATE DEFAULT (datetime('now','localtime')),
+        pat_address TEXT NOT NULL, pat_gender INTEGER)
+    '''
+)
 
-conn.execute('''CREATE TABLE if not exists appointment
-(app_id INTEGER PRIMARY KEY AUTOINCREMENT,
-pat_id INTEGER NOT NULL,
-doc_id INTEGER NOT NULL,
-appointment_date DATE NOT NULL,
-FOREIGN KEY(pat_id) REFERENCES patient(pat_id),
-FOREIGN KEY(doc_id) REFERENCES doctor(doc_id));''')
+conn.execute(
+    '''
+        CREATE TABLE IF NOT EXISTS "doctor"
+        (doc_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        doc_first_name TEXT NOT NULL,
+        doc_last_name TEXT NOT NULL,
+        doc_ph_no TEXT NOT NULL,
+        doc_date DATE DEFAULT (datetime('now','localtime')),
+        doc_address TEXT NOT NULL, doc_gender INTEGER);
+
+    '''
+)
+
+conn.execute(
+    '''
+        CREATE TABLE IF NOT EXISTS appointment
+        (app_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pat_id INTEGER NOT NULL,
+        doc_id INTEGER NOT NULL,
+        appointment_date DATE NOT NULL,
+        state INTEGER DEFAULT 0,
+        FOREIGN KEY(pat_id) REFERENCES "_patient"(pat_id),
+        FOREIGN KEY(doc_id) REFERENCES doctor(doc_id));
+    '''
+)
+
+conn.execute(
+    '''
+        CREATE TABLE IF NOT EXISTS user (
+        id INTEGER NOT NULL,
+        email TEXT PRIMARY KEY,
+        password TEXT,
+        role_id INTEGER NOT NULL,
+        last_login DATE DEFAULT (datetime('now','localtime')));
+    '''
+)

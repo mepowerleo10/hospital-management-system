@@ -1,10 +1,14 @@
 $(document).ready(function () {
+
     var table
-    function addDoctor(data) {
+
+
+    function addAppointment(data) {
+
         var settings = {
             "async": true,
             "crossDomain": true,
-            "url": "doctor",
+            "url": "appointment",
             "method": "POST",
             "headers": {
                 "content-type": "application/json",
@@ -14,20 +18,23 @@ $(document).ready(function () {
             "processData": false,
             "data": JSON.stringify(data)
         }
+
         $.ajax(settings).done(function (response) {
+            $.notify("Appointment Added Successfully", { "status": "success" });
+
             $('.modal.in').modal('hide')
-            $.notify("Doctor Added Successfully", { "status": "success" });
             table.destroy();
             $('#datatable4 tbody').empty(); // empty in case the columns change
-            getDoctor()
+            getAppointment()
         });
+
     }
 
-    function deleteDoctor(id) {
+    function deleteAppointment(id) {
         var settings = {
             "async": true,
             "crossDomain": true,
-            "url": "doctor/" + id,
+            "url": "appointment/" + id,
             "method": "DELETE",
             "headers": {
                 "cache-control": "no-cache",
@@ -45,44 +52,25 @@ $(document).ready(function () {
             closeOnConfirm: false
         }, function () {
             $.ajax(settings).done(function (response) {
-                swal("Deleted!", "Doctor has been deleted.", "success");
+                swal("Deleted!", "Appointment has been deleted.", "success");
                 table.destroy();
                 $('#datatable4 tbody').empty(); // empty in case the columns change
-                getDoctor()
+                getAppointment()
             });
 
+
         });
 
     }
 
-    function updateDoctor(data, id) {
+
+
+    function getAppointment() {
+
         var settings = {
             "async": true,
             "crossDomain": true,
-            "url": "doctor/" + id,
-            "method": "PUT",
-            "headers": {
-                "content-type": "application/json",
-                "cache-control": "no-cache"
-            },
-            "processData": false,
-            "data": JSON.stringify(data)
-        }
-
-        $.ajax(settings).done(function (response) {
-            $.notify("Doctor Updated Successfully", { "status": "success" });
-            $('.modal.in').modal('hide')
-            table.destroy();
-            $('#datatable4 tbody').empty(); // empty in case the columns change
-            getDoctor()
-        });
-    }
-
-    function getDoctor() {
-        var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "doctor",
+            "url": "patient-appointments",
             "method": "GET",
             "headers": {
                 "cache-control": "no-cache"
@@ -90,6 +78,14 @@ $(document).ready(function () {
         }
 
         $.ajax(settings).done(function (response) {
+
+            for (i = 0; i < response.length; i++) {
+                response[i].pat_fullname = response[i].pat_first_name + " " + response[i].pat_last_name
+                response[i].doc_fullname = response[i].doc_first_name + " " + response[i].doc_last_name
+            }
+
+
+
             table = $('#datatable4').DataTable({
                 "bDestroy": true,
                 'paging': true, // Table pagination
@@ -99,21 +95,13 @@ $(document).ready(function () {
                 "aaSorting": [],
                 aoColumns: [
                     {
-                        mData: 'doc_first_name'
+                        mData: 'doc_fullname'
                     },
                     {
-                        mData: 'doc_last_name'
+                        mData: 'pat_fullname'
                     },
                     {
-                        mData: 'doc_address'
-                    },
-                    {
-                        mData: 'doc_ph_no'
-                    },
-                    {
-                        mRender: function (o) {
-                            return '<button class="btn-xs btn btn-info btn-edit" type="button">Edit</button>';
-                        }
+                        mData: 'appointment_date'
                     },
                     {
                         mRender: function (o) {
@@ -125,44 +113,97 @@ $(document).ready(function () {
             $('#datatable4 tbody').on('click', '.delete-btn', function () {
                 var data = table.row($(this).parents('tr')).data();
                 console.log(data)
-                deleteDoctor(data.doc_id)
+                deleteAppointment(data.app_id)
 
             });
-            $('.btn-edit').one("click", function (e) {
-                var data = table.row($(this).parents('tr')).data();
-                $('#myModal').modal().one('shown.bs.modal', function (e) {
-                    for (var key in data) {
-                        $("[name=" + key + "]").val(data[key])
-                    }
-                    $("#savethepatient").off("click").on("click", function (e) {
-                        var instance = $('#detailform').parsley();
-                        instance.validate()
-                        console.log(instance.isValid())
-                        if (instance.isValid()) {
-                            jsondata = $('#detailform').serializeJSON();
-                            updateDoctor(jsondata, data.doc_id)
-                        }
-                    })
-                })
-            });
+
+
         });
+
+
     }
+
+
+
 
     $("#addpatient").click(function () {
 
         $('#myModal').modal().one('shown.bs.modal', function (e) {
 
+            $("#doctor_select").html(doctorSelect)
+            $("#patient_select").html(patientSelect)
 
+            $(".form_datetime").datetimepicker({
+                format: 'yyyy-mm-dd hh:ii:ss',
+                startDate: new Date(),
+                initialDate: new Date()
+            });
             $("#savethepatient").off("click").on("click", function (e) {
-                console.log("inn")
+
+
                 var instance = $('#detailform').parsley();
                 instance.validate()
                 if (instance.isValid()) {
                     jsondata = $('#detailform').serializeJSON();
-                    addDoctor(jsondata)
+                    addAppointment(jsondata)
                 }
+
             })
+
         })
+
+
+
     })
+
+
+    var doctorSelect = ""
+    function getDoctor() {
+
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "doctor",
+            "method": "GET",
+            "headers": {
+                "cache-control": "no-cache"
+            }
+        }
+
+        $.ajax(settings).done(function (response) {
+
+            for (i = 0; i < response.length; i++) {
+
+                response[i].doc_fullname = response[i].doc_first_name + " " + response[i].doc_last_name
+                doctorSelect += "<option value=" + response[i].doc_id + ">" + response[i].doc_fullname + "</option>"
+            }
+
+
+        })
+    }
+    var patientSelect = ""
+    function getPatient() {
+
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "patient",
+            "method": "GET",
+            "headers": {
+                "cache-control": "no-cache"
+            }
+        }
+
+        $.ajax(settings).done(function (response) {
+            for (i = 0; i < response.length; i++) {
+                response[i].pat_fullname = response[i].pat_first_name + " " + response[i].pat_last_name
+                patientSelect += "<option value=" + response[i].pat_id + ">" + response[i].pat_fullname + "</option>"
+            }
+
+        })
+    }
+
     getDoctor()
+    getPatient()
+    getAppointment()
 })
