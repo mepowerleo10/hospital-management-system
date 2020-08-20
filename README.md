@@ -8,12 +8,12 @@ A software testing application
 
 ### Copyright
 
-Copyright (c) 2018 - [Ferdinand Kamuzora]ferdinandkamuzora@outlook.com)
+Copyright (c) 2019 - [Mussa Mipawa Shomari](mepowerleo10@gmail.com)
 
 ### /*
  * readme.md
  * 
- * Copyright 2019 Ferdinand Kamuzora <Ferdinand Kamuzora@DESKTOP-JO2AHF9>
+ * Copyright 2019
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,6 @@ Copyright (c) 2018 - [Ferdinand Kamuzora]ferdinandkamuzora@outlook.com)
  * 
  * 
  */
-
-
->>>>>>> My first commit
 
 ### Configuration
 
