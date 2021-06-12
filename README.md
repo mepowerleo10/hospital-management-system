@@ -8,7 +8,7 @@ A software testing application
 
 ### Copyright
 
-Copyright (c) 2019 - [Mussa Mipawa Shomari](mepowerleo10@gmail.com)
+Copyright (c) 2019 - [Mussa Mipawa Shomari](mepowerleo10@gmail.com), [Diane Joseph](djmwakaponda@gmail.com), [Ferdinand Kamuzora](ferdinandkamuzora@outlook.com)
 
 ### /*
  * readme.md
